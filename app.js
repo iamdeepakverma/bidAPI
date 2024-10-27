@@ -27,8 +27,8 @@ app.use("/category",categoryRouter);
 app.use("/subcategory" ,subcategoryRouter);
 app.use("/product",productRouter);
 app.use("/bid",bidRouter);
-
-const PORT = 3004
+    
+const PORT = process.env.PORT || 9090
 
 app.listen(PORT);
 console.log(`server invoked at link ${PORT}`);
