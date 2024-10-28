@@ -1,4 +1,14 @@
 import mongoose from 'mongoose';
-const url="mongodb://127.0.0.1:27017/testdb";
+import dotenv from 'dotenv';
+
+dotenv.config(); // Load environment variables
+
+const url=process.env.DATABASE;
+
+if(!url){
+    console.log("Database Not Found");
+    process.exit(1);
+}
+
 mongoose.connect(url);
 console.log("Successfully connected to mongodb database...");
