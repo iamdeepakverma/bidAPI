@@ -14,8 +14,10 @@ if (!url) {
 mongoose.set('strictQuery', true); // Set this to false if you prefer the future default behavior
 
 // Connect to MongoDB
+// console.log("SOmething error")
 mongoose.connect(url, {
     useNewUrlParser: true,
+    // useNewUrlParser: true,
     useUnifiedTopology: true,
     tls: true, // Ensures TLS is enforced if your MongoDB setup requires it
 })

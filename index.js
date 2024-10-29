@@ -19,7 +19,7 @@ app.use(bodyParser.urlencoded({extended:true}));
 app.use(cors());
 
 // to handle request file content
-// app.use(fileUpload());
+app.use(fileUpload());
 
 //route level middleware to load api router
 app.use("/user",userRouter);

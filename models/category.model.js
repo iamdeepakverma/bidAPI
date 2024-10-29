@@ -2,6 +2,7 @@
 import mongoose from 'mongoose';
 import uniqueValidator from 'mongoose-unique-validator';
 
+
 const CategorySchema = mongoose.Schema({
   _id: Number,
   catnm: {
