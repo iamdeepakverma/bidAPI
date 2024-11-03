@@ -13,6 +13,8 @@ router.patch("/update",userController.updateUser);
 
 router.post("/login",userController.login);
 
+router.get("/verify-email",userController.verifyEmail);
+
 export default router;
 
 

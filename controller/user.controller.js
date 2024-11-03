@@ -5,25 +5,60 @@ import rs from 'randomstring';
 import url from 'url';
 import sendMailAPI from './email.controller.js';
 
+// Simple random string generator
+const generateRandomToken = (length) => {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    result += characters[randomIndex];
+  }
+  return result;
+};
+
 export var save=async (req,res,next)=>{
   var userDetails=req.body
   var userList = await UserSchemaModel.find();
   var l=userList.length;
   var _id=l==0?1:userList[l-1]._id+1;
-  userDetails={...userDetails,"_id":_id,"status":0,"role":"user","info":Date()};
-  try
-  {
-   var user=await UserSchemaModel.create(userDetails);
-   sendMailAPI(user.email,user.password);
-   res.status(201).json({"status":true});
-  }
-  catch(err)
-  {
-   console.log(err);
-   res.status(500).json({"status": false});
-  }
+  const verificationToken = generateRandomToken(32); // 32-character token generate karein
+  var verificationLink = `http://localhost:8080/user/verify-email?token=${verificationToken}`; // Update karein
+  userDetails={...userDetails,"_id":_id,"status":0,"role":"user","info":Date(), "verificationToken": verificationToken };
+
+  const user=await UserSchemaModel.create(userDetails);
+  console.log(user)
+  if(user)
+    {
+      //send email via api
+      sendMailAPI(userDetails.email,verificationLink);
+      return res.status(201).json({"result":"User register successfully...."});
+    }
+    else
+      return res.status(500).json({"result": "Server Error"});
 }
 
+// New route to verify email
+export const verifyEmail = async (req, res) => {
+  const { token } = req.query;
+
+  try {
+    const user = await UserSchemaModel.findOneAndUpdate(
+      { verificationToken: token }, // Token se user dhoondhe
+      { status: 1, verificationToken: null }, // Status update karein aur token ko null karein
+      { new: true } // New user data return karega
+    );
+    console.log(user);
+
+    if (user) {
+      // Yahan redirect nahi karte, sirf success message bhejte hain
+      return res.status(200).json({ result: "Email verified successfully. Please go for Login" });
+    } else {
+      return res.status(400).json({ result: "Invalid User" });
+    }
+  } catch (error) {
+    return res.status(500).json({ result: "Token verify error." });
+  }
+};
 
 export var login=async (req,res,next)=>{
   var userDetails=req.body;

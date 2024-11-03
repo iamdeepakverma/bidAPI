@@ -10,8 +10,8 @@ const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
 export var save=async (req,res,next)=>{
     var pDetails=req.body
-    // console.log(req.body)
-    // console.log(req.files)
+    console.log(req.body)
+    console.log(req.files)
     var pList=await ProductSchemaModel.find().sort({"_id":-1}).limit(1);
     var l=pList.length;
     var _id=l==0?1:pList[0]._id+1;

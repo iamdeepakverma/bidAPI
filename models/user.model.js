@@ -42,6 +42,9 @@ const UserSchema = mongoose.Schema({
     type: String,
     required: [true,"Gender is required"],
   },
+  verificationToken: { 
+    type: String 
+  },
   role: String,
   status: Number,
   info: String

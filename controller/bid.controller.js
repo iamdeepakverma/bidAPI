@@ -15,6 +15,7 @@ export var save=async (req,res,next)=>{
     var _id=l==0?1:bidList[0]._id+1;
     bidDetails={...bidDetails,"_id":_id,"info":Date()};
     var bid = await BidSchemaModel.create(bidDetails);
+    console.log(bid )
     if(bid)
       return res.status(201).json({"result":"Product bid successfully...."});
     else

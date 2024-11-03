@@ -1,21 +1,25 @@
 import nodemailer from 'nodemailer'; 
 
-function sendMailAPI(email,password)  
+function sendMailAPI( email,verificationLink)  
 {
 var transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'deepuverma124124@gmail.com',
-    pass: 'bchwkylwlspwhkwd'
+    user: 'deepakvermadutech@gmail.com',
+    pass: 'iqtpztuygjesrrlu'
   }
 });
 
 var mailOptions = {
-  from: 'deepuverma124124@gmail.com',
+  from: 'deepakvermadutech@gmail.com',
   to: email,
   subject: 'Verification mail BID me',
-  html: "<h1>Welcome to MyApp</h1><p>you have successfully register to our app , your login credentials are attached below</p><h2>Email : "+email+"</h2><h2>Password = "+password+":<h1>Click the link to verify</h1>http://localhost:3000/verifyuser"+email};
-
+  html: `<h1>Welcome to MyApp</h1>
+  <p>You have successfully registered to our app. Your login credentials are below:</p>
+ 
+  <h3>Click the link to verify your email: ${verificationLink}</h3>`
+};
+// console.log(mailOptions)
 transporter.sendMail(mailOptions, function(error, info){
   if (error) {
     console.log(error);
