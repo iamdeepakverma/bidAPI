@@ -5,6 +5,7 @@ import rs from 'randomstring';
 import url from 'url';
 import sendMailAPI from './email.controller.js';
 
+
 // Simple random string generator
 const generateRandomToken = (length) => {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
