@@ -16,26 +16,41 @@ const generateRandomToken = (length) => {
   return result;
 };
 
-export var save=async (req,res,next)=>{
-  var userDetails=req.body
-  var userList = await UserSchemaModel.find();
-  var l=userList.length;
-  var _id=l==0?1:userList[l-1]._id+1;
-  const verificationToken = generateRandomToken(32); // 32-character token generate karein
-  var verificationLink = `http://localhost:8080/user/verify-email?token=${verificationToken}`; // Update karein
-  userDetails={...userDetails,"_id":_id,"status":0,"role":"user","info":Date(), "verificationToken": verificationToken };
+export var save = async (req, res, next) => {
+  try {
+    var userDetails = req.body;
+    var userList = await UserSchemaModel.find();
+    var l = userList.length;
+    var _id = l == 0 ? 1 : userList[l - 1]._id + 1;
 
-  const user=await UserSchemaModel.create(userDetails);
-  console.log(user)
-  if(user)
-    {
-      //send email via api
-      sendMailAPI(userDetails.email,verificationLink);
-      return res.status(201).json({"result":"User register successfully...."});
+    const verificationToken = generateRandomToken(32); // 32-character token generation
+    var verificationLink = `http://localhost:8080/user/verify-email?token=${verificationToken}`; // Verification link
+
+    userDetails = {
+      ...userDetails,
+      "_id": _id,
+      "status": 0,
+      "role": "user",
+      "info": Date(),
+      "verificationToken": verificationToken
+    };
+
+    const user = await UserSchemaModel.create(userDetails);
+    console.log(user);
+3
+    if (user) {
+      // Send verification email
+      sendMailAPI(userDetails.email, verificationLink);
+      return res.status(201).json({ result: "sucess" });
+    } else {
+      return res.status(500).json({ result: "fail" });
     }
-    else
-      return res.status(500).json({"result": "Server Error"});
-}
+  } catch (error) {
+    console.error('Error during registration:', error.message); // Log the error for debugging
+    return res.status(500).json({ result: "fail", message: "An error occurred during registration." });
+  }
+};
+
 
 // New route to verify email
 export const verifyEmail = async (req, res) => {
