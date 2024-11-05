@@ -24,7 +24,7 @@ export var save = async (req, res, next) => {
     var _id = l == 0 ? 1 : userList[l - 1]._id + 1;
 
     const verificationToken = generateRandomToken(32); // 32-character token generation
-    var verificationLink = `http://localhost:8080/user/verify-email?token=${verificationToken}`; // Verification link
+    var verificationLink = `https://bidapi.onrender.com/user/verify-email?token=${verificationToken}`; // Verification link
 
     userDetails = {
       ...userDetails,
